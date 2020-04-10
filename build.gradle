@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'spf'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+//jar {
+//    manifest {
+//        attributes(
+//                "Main-Class": "com.gridnine.spf.app.SpfBoot"
+//        )
+//    }
+//}
+
+task sources(type:org.gradle.jvm.tasks.Jar){
+    from sourceSets.main.allSource
+    archiveName = 'spf-updater-1.0-sources.jar'
+    destinationDir = file("${buildDir}/libs")
+}
+
+task dist(group: "build", dependsOn:[jar, sources])
