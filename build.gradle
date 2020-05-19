@@ -30,4 +30,21 @@ task sources(type:org.gradle.jvm.tasks.Jar){
     destinationDir = file("${buildDir}/libs")
 }
 
-task dist(group: "build", dependsOn:[jar, sources])
+task dist(group: "build", dependsOn:[jar, sources]){
+    doLast {
+        delete("build/dist")
+        copy {
+            from("config")
+            into("build/dist/config")
+        }
+        copy {
+            from("bin")
+            into("build/dist/bin")
+        }
+        mkdir("build/dist/lib")
+        copy {
+            from("build/libs/spf-updater-1.0.jar")
+            into("build/dist/lib")
+        }
+    }
+}

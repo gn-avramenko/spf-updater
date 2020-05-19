@@ -16,8 +16,8 @@ public class StopSpfAppHandler implements CommandHandler{
 
     @Override
     public byte[] handleCommand(String parameters, byte[] body) throws Exception {
-        File file = new File(spfDir, "temp/.lock");
-        if(!file.exists() || file.delete()){
+        File file = new File(spfDir, "temp/lock.tmp");
+        if(!file.exists()){
             return "OK".getBytes();
         }
         File shellFile = new File(spfDir, "bin/stop.sh");
