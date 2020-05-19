@@ -27,8 +27,8 @@ public class StartSpfAppHandler implements CommandHandler{
 
     @Override
     public byte[] handleCommand(String parameters, byte[] body) throws Exception {
-        File file = new File(spfDir, "temp/.lock");
-        if(file.exists() && !file.delete()){
+        File file = new File(spfDir, "temp/lock.tmp");
+        if(file.exists()){
             throw new Exception("Unable to delete lock file, app is already running");
         }
         File shellFile = new File(spfDir, "bin/run.sh");
