@@ -14,23 +14,30 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 }
 
-jar {
+
+
+task singleJar(type: Jar) {
     manifest {
         attributes(
                 "Main-Class": "com.gridnine.spf.updater.boot.SpfUpdater"
         )
     }
+    archiveFileName ="spf-updater-1.0.jar"
+    duplicatesStrategy = 'exclude'
+    from(configurations.compile.resolve().collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+        exclude 'META-INF/INDEX.LIST'
+    }
+    with jar
 }
 
-task sources(type:org.gradle.jvm.tasks.Jar){
-    from sourceSets.main.allSource
-    archiveName = 'spf-updater-1.0-sources.jar'
-    destinationDir = file("${buildDir}/libs")
-}
 
-task dist(group: "build", dependsOn:[jar, sources]){
+task dist(group: "build", dependsOn:[singleJar]){
     doLast {
         delete("build/dist")
         copy {

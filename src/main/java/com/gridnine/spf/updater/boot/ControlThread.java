@@ -29,7 +29,7 @@ final class ControlThread extends Thread {
 
     ControlThread(int port,  StopAppCallback callback) throws Exception {
 
-        this.serverSocket = new ServerSocket(port, 1, InetAddress.getByName("localhost"));
+        this.serverSocket = new ServerSocket(port, 1, null);
         this.stopAppCallback = callback;
         this.setName("spf-updater-control-thread");
     }
@@ -67,17 +67,6 @@ final class ControlThread extends Thread {
     }
 
     private synchronized boolean handleRequest(Socket clientSocket) {
-        if (!this.isValidRemoteHost(clientSocket.getInetAddress())) {
-            println("incoming connection to control socket registered from REMOTE address " + clientSocket.getInetAddress() + ", attempt to execute command was IGNORED");
-
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                //nopps
-            }
-
-            return false;
-        }
 
         boolean result = false;
 
@@ -135,21 +124,7 @@ final class ControlThread extends Thread {
     }
 
 
-    private boolean isValidRemoteHost(InetAddress addr) {
-        byte[] localAddr = this.serverSocket.getInetAddress().getAddress();
-        byte[] remoteAddr = addr.getAddress();
-        if (localAddr.length != remoteAddr.length) {
-            return false;
-        } else {
-            for (int i = 0; i < remoteAddr.length; ++i) {
-                if (localAddr[i] != remoteAddr[i]) {
-                    return false;
-                }
-            }
 
-            return true;
-        }
-    }
 
     private static void println(String text) {
         System.out.println(text);
