@@ -1,2 +1,3 @@
 .gradle
 build
+/out/production/classes/com/gridnine/spf/updater/
