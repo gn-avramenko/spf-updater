@@ -12,6 +12,7 @@ public class SpfUpdater {
         String mode = System.getProperty("mode");
 
         int port = Integer.parseInt(properties.getProperty("port", "21567"));
+        int appPort = Integer.parseInt(properties.getProperty("appPort", "21566"));
         if ("stop".equals(mode)) {
             new StopSpfUpdateHandler(port).handle();
             return;
@@ -48,6 +49,7 @@ public class SpfUpdater {
         File spfLibDir = new File(spfDirFile, "lib");
         controlThread.register(new GetExistingFilesInfoHandler(spfLibDir));
         controlThread.register(new InitLocalRepositoryHandler(spfLibDir));
+        controlThread.register(new IsApplicationRunningHandler(appPort));
         controlThread.register(new DeleteFileHandler());
         controlThread.register(new AddFileHandler());
         controlThread.register(new StopSpfAppHandler(spfDirFile));
